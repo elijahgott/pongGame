@@ -14,6 +14,11 @@ running = True
 dt = 0 # delta for time, time since last render i think
 score = 0 # IMPLEMENT SCORE!!!
 
+# create font
+font = pygame.font.Font(None, 48)
+text_surface = font.render(f"Score: {score}", True, "white")
+text_rect = text_surface.get_rect()
+
 # player object, set initial position
 player = Player(screen_width / 2, screen_height - 25)
 
@@ -34,8 +39,8 @@ while running:
     # RENDER YOUR GAME HERE
     player.draw(screen, "white")
     ball.draw(screen, "white")
-
-    # pygame.draw.circle(screen, "pink", ball_pos, ball_radius) # draw ball
+    # draw ui
+    screen.blit(text_surface, text_rect)
 
     # USER INPUT
     player.move(screen_height, screen_width, dt)
@@ -46,6 +51,10 @@ while running:
 
     # HANDLE PLAYER AND BALL COLLISION
     if pygame.Rect.colliderect(player.rect, ball.rect):
+        score += 1
+        text_surface = font.render(f"Score: {score}", True, "white")
+        text_rect = text_surface.get_rect()
+        
         if ball.direction.y == 1:
             ball.direction.y = -1 # change direction to up
             ball.y = ball.y - 5 # ball gets stuck inside rectangle otherwise
